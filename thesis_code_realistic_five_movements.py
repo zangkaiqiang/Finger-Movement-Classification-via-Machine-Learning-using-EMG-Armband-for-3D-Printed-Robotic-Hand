@@ -65,34 +65,34 @@ def find_one_hot(labels,classes):
     return out
 
 # This process checks if Myo Connect.exe is running
-def check_if_process_running():
-    try:
-        for proc in psutil.process_iter():
-            if proc.name()=='Myo Connect.exe':
-                return True            
-        return False
-            
-    except (psutil.NoSuchProcess,psutil.AccessDenied, psutil.ZombieProcess):
-        print (PROCNAME, " not running")
+# def check_if_process_running():
+#     try:
+#         for proc in psutil.process_iter():
+#             if proc.name()=='Myo Connect.exe':
+#                 return True
+#         return False
+#
+#     except (psutil.NoSuchProcess,psutil.AccessDenied, psutil.ZombieProcess):
+#         print (PROCNAME, " not running")
 
 # If the process Myo Connect.exe is not running then we restart that process
-def restart_process():
-    PROCNAME = "Myo Connect.exe"
-
-    for proc in psutil.process_iter():
-        # check whether the process name matches
-        if proc.name() == PROCNAME:
-            proc.kill()
-            # Wait a second
-            time.sleep(1)
-
-    while(check_if_process_running()==False):
-        path = 'C:\Program Files (x86)\Thalmic Labs\Myo Connect\Myo Connect.exe'
-        os.startfile(path)
-        time.sleep(1)
-
-    print("Process started")
-    return True
+# def restart_process():
+#     PROCNAME = "Myo Connect.exe"
+#
+#     for proc in psutil.process_iter():
+#         # check whether the process name matches
+#         if proc.name() == PROCNAME:
+#             proc.kill()
+#             # Wait a second
+#             time.sleep(1)
+#
+#     while(check_if_process_running()==False):
+#         path = 'C:\Program Files (x86)\Thalmic Labs\Myo Connect\Myo Connect.exe'
+#         os.startfile(path)
+#         time.sleep(1)
+#
+#     print("Process started")
+#     return True
 
 # This is Myo-python SDK’s listener that listens to EMG signal
 class Listener(myo.DeviceListener):
@@ -213,8 +213,8 @@ def Train(conc_array):
                 data_array.clear()
                 break
             except:
-                while(restart_process()!=True):
-                    pass
+                # while(restart_process()!=True):
+                #     pass
                 # Wait for 3 seconds until Myo Connect.exe starts
                 time.sleep(3)
                 
@@ -272,7 +272,7 @@ def Train(conc_array):
                 print (str(e))
             except TypeError as e:
                 print (str(e))
-                ser.port.close()
+                # ser.port.close()
             
 
 def main():
@@ -289,13 +289,14 @@ def main():
     # Because sometimes the application does not run even when Myo Connect process is running
     # So i think its a good idea to just kill if its not running and restart it
 
-    while(restart_process()!=True):
-        pass
+    # while(restart_process()!=True):
+    #     pass
     # Wait for 3 seconds until Myo Connect.exe starts
     time.sleep(3)
     
     # Initialize the SDK of Myo Armband
-    myo.init('C:\\Users\\shaya\\AppData\\Local\\Programs\\Python\\Python36\\myo64.dll')
+    myo.init(sdk_path='sdk')
+    # myo.init('C:\\Users\\shaya\\AppData\\Local\\Programs\\Python\\Python36\\myo64.dll')
     hub = myo.Hub()
     listener = Listener(number_of_samples)
 
@@ -313,8 +314,8 @@ def main():
             data_array.clear()
             break
         except:
-            while(restart_process()!=True):
-                pass
+            # while(restart_process()!=True):
+            #     pass
             # Wait for 3 seconds until Myo Connect.exe starts
             time.sleep(3)
            
@@ -335,8 +336,8 @@ def main():
             data_array.clear()
             break
         except:
-            while(restart_process()!=True):
-                pass
+            # while(restart_process()!=True):
+            #     pass
             # Wait for 3 seconds until Myo Connect.exe starts
             time.sleep(3)
 
@@ -351,8 +352,8 @@ def main():
             data_array.clear()
             break
         except:
-            while(restart_process()!=True):
-                pass
+            # while(restart_process()!=True):
+            #     pass
             # Wait for 3 seconds until Myo Connect.exe starts
             time.sleep(3)
 
@@ -369,8 +370,8 @@ def main():
             data_array.clear()
             break
         except:
-            while(restart_process()!=True):
-                pass
+            # while(restart_process()!=True):
+            #     pass
             # Wait for 3 seconds until Myo Connect.exe starts
             time.sleep(3)
 
@@ -386,8 +387,8 @@ def main():
             data_array.clear()
             break
         except:
-            while(restart_process()!=True):
-                pass
+            # while(restart_process()!=True):
+            #     pass
             # Wait for 3 seconds until Myo Connect.exe starts
             time.sleep(3)
 
@@ -419,7 +420,7 @@ def main():
     # Here we stack all the data row wise
     conc_array = np.concatenate([thumb_open_averages,index_open_averages,middle_open_averages,ring_open_averages,pinky_open_averages],axis=0)
     print(conc_array.shape)
-    np.savetxt('C:/Users/shaya/Desktop/'+name+'_five_movements.txt', conc_array, fmt='%i')
+    np.savetxt('output'+name+'_five_movements.txt', conc_array, fmt='%i')
     # In this method the EMG data gets trained and verified
     Train(conc_array)
 
