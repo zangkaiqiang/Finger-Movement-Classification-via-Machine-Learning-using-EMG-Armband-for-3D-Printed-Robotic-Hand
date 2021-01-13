@@ -2,3 +2,5 @@
 venv
 sdk
 output
+.vscode
+*/__pycache__
