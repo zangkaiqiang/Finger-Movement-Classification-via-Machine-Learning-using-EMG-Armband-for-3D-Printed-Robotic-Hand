@@ -436,5 +436,5 @@ def my_train():
 
 
 if __name__ == '__main__':
-    # main()
-    my_train()
+    main()
+    # my_train()
